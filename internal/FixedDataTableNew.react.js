@@ -543,6 +543,7 @@ var FixedDataTable = React.createClass({
       height: state.bodyHeight,
       offsetTop: offsetTop,
       onRowClick: state.onRowClick,
+      onRowContextMenu: state.onRowContextMenu,
       onRowDoubleClick: state.onRowDoubleClick,
       onRowMouseDown: state.onRowMouseDown,
       onRowMouseEnter: state.onRowMouseEnter,

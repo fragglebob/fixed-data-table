@@ -12,14 +12,16 @@
 
 'use strict';
 
-var React = require('React');
-var FixedDataTableCellGroup = require('FixedDataTableCellGroup.react');
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var cx = require('cx');
-var joinClasses = require('joinClasses');
-var translateDOMPositionXY = require('translateDOMPositionXY');
+var React = require('./React');
+var FixedDataTableCellGroup = require('./FixedDataTableCellGroup.react');
 
-var {PropTypes} = React;
+var cx = require('./cx');
+var joinClasses = require('./joinClasses');
+var translateDOMPositionXY = require('./translateDOMPositionXY');
+
+var PropTypes = React.PropTypes;
 
 /**
  * Component that renders the row for <FixedDataTable />.
@@ -27,6 +29,7 @@ var {PropTypes} = React;
  * only <FixedDataTable /> should use the component internally.
  */
 var FixedDataTableRowImpl = React.createClass({
+  displayName: 'FixedDataTableRowImpl',
 
   propTypes: {
 
@@ -88,73 +91,73 @@ var FixedDataTableRowImpl = React.createClass({
      * @param number|string columnKey
      * @param object event
      */
-    onColumnResize: PropTypes.func,
+    onColumnResize: PropTypes.func
   },
 
-  render() /*object*/ {
+  render: function render() /*object*/{
     var style = {
       width: this.props.width,
-      height: this.props.height,
+      height: this.props.height
     };
 
     var className = cx({
       'fixedDataTableRowLayout/main': true,
       'public/fixedDataTableRow/main': true,
-      'public/fixedDataTableRow/highlighted': (this.props.index % 2 === 1),
-      'public/fixedDataTableRow/odd': (this.props.index % 2 === 1),
-      'public/fixedDataTableRow/even': (this.props.index % 2 === 0),
+      'public/fixedDataTableRow/highlighted': this.props.index % 2 === 1,
+      'public/fixedDataTableRow/odd': this.props.index % 2 === 1,
+      'public/fixedDataTableRow/even': this.props.index % 2 === 0
     });
 
     var fixedColumnsWidth = this._getColumnsWidth(this.props.fixedColumns);
-    var fixedColumns =
-      <FixedDataTableCellGroup
-        key="fixed_cells"
-        isScrolling={this.props.isScrolling}
-        height={this.props.height}
-        left={0}
-        width={fixedColumnsWidth}
-        zIndex={2}
-        columns={this.props.fixedColumns}
-        onColumnResize={this.props.onColumnResize}
-        rowHeight={this.props.height}
-        rowIndex={this.props.index}
-      />;
+    var fixedColumns = React.createElement(FixedDataTableCellGroup, {
+      key: 'fixed_cells',
+      isScrolling: this.props.isScrolling,
+      height: this.props.height,
+      left: 0,
+      width: fixedColumnsWidth,
+      zIndex: 2,
+      columns: this.props.fixedColumns,
+      onColumnResize: this.props.onColumnResize,
+      rowHeight: this.props.height,
+      rowIndex: this.props.index
+    });
     var columnsShadow = this._renderColumnsShadow(fixedColumnsWidth);
-    var scrollableColumns =
-      <FixedDataTableCellGroup
-        key="scrollable_cells"
-        isScrolling={this.props.isScrolling}
-        height={this.props.height}
-        left={this.props.scrollLeft}
-        offsetLeft={fixedColumnsWidth}
-        width={this.props.width - fixedColumnsWidth}
-        zIndex={0}
-        columns={this.props.scrollableColumns}
-        onColumnResize={this.props.onColumnResize}
-        rowHeight={this.props.height}
-        rowIndex={this.props.index}
-      />;
+    var scrollableColumns = React.createElement(FixedDataTableCellGroup, {
+      key: 'scrollable_cells',
+      isScrolling: this.props.isScrolling,
+      height: this.props.height,
+      left: this.props.scrollLeft,
+      offsetLeft: fixedColumnsWidth,
+      width: this.props.width - fixedColumnsWidth,
+      zIndex: 0,
+      columns: this.props.scrollableColumns,
+      onColumnResize: this.props.onColumnResize,
+      rowHeight: this.props.height,
+      rowIndex: this.props.index
+    });
 
-    return (
-      <div
-        className={joinClasses(className, this.props.className)}
-        onClick={this.props.onClick ? this._onClick : null}
-        onContextMenu={this.props.onContextMenu ? this._onContextMenu : null}
-        onDoubleClick={this.props.onDoubleClick ? this._onDoubleClick : null}
-        onMouseDown={this.props.onMouseDown ? this._onMouseDown : null}
-        onMouseEnter={this.props.onMouseEnter ? this._onMouseEnter : null}
-        onMouseLeave={this.props.onMouseLeave ? this._onMouseLeave : null}
-        style={style}>
-        <div className={cx('fixedDataTableRowLayout/body')}>
-          {fixedColumns}
-          {scrollableColumns}
-          {columnsShadow}
-        </div>
-      </div>
+    return React.createElement(
+      'div',
+      {
+        className: joinClasses(className, this.props.className),
+        onClick: this.props.onClick ? this._onClick : null,
+        onContextMenu: this.props.onContextMenu ? this._onContextMenu : null,
+        onDoubleClick: this.props.onDoubleClick ? this._onDoubleClick : null,
+        onMouseDown: this.props.onMouseDown ? this._onMouseDown : null,
+        onMouseEnter: this.props.onMouseEnter ? this._onMouseEnter : null,
+        onMouseLeave: this.props.onMouseLeave ? this._onMouseLeave : null,
+        style: style },
+      React.createElement(
+        'div',
+        { className: cx('fixedDataTableRowLayout/body') },
+        fixedColumns,
+        scrollableColumns,
+        columnsShadow
+      )
     );
   },
 
-  _getColumnsWidth(/*array*/ columns) /*number*/ {
+  _getColumnsWidth: function _getColumnsWidth( /*array*/columns) /*number*/{
     var width = 0;
     for (var i = 0; i < columns.length; ++i) {
       width += columns[i].props.width;
@@ -162,48 +165,49 @@ var FixedDataTableRowImpl = React.createClass({
     return width;
   },
 
-  _renderColumnsShadow(/*number*/ left) /*?object*/ {
+  _renderColumnsShadow: function _renderColumnsShadow( /*number*/left) /*?object*/{
     if (left > 0) {
       var className = cx({
         'fixedDataTableRowLayout/fixedColumnsDivider': true,
         'fixedDataTableRowLayout/columnsShadow': this.props.scrollLeft > 0,
         'public/fixedDataTableRow/fixedColumnsDivider': true,
-        'public/fixedDataTableRow/columnsShadow': this.props.scrollLeft > 0,
+        'public/fixedDataTableRow/columnsShadow': this.props.scrollLeft > 0
       });
       var style = {
         left: left,
         height: this.props.height
       };
-      return <div className={className} style={style} />;
+      return React.createElement('div', { className: className, style: style });
     }
   },
 
-  _onClick(/*object*/ event) {
+  _onClick: function _onClick( /*object*/event) {
     this.props.onClick(event, this.props.index);
   },
 
-  _onContextMenu(/*object*/ event) {
+  _onContextMenu: function _onContextMenu( /*object*/event) {
     this.props.onContextMenu(event, this.props.index);
   },
 
-  _onDoubleClick(/*object*/ event) {
+  _onDoubleClick: function _onDoubleClick( /*object*/event) {
     this.props.onDoubleClick(event, this.props.index);
   },
 
-  _onMouseDown(/*object*/ event) {
+  _onMouseDown: function _onMouseDown( /*object*/event) {
     this.props.onMouseDown(event, this.props.index);
   },
 
-  _onMouseEnter(/*object*/ event) {
+  _onMouseEnter: function _onMouseEnter( /*object*/event) {
     this.props.onMouseEnter(event, this.props.index);
   },
 
-  _onMouseLeave(/*object*/ event) {
+  _onMouseLeave: function _onMouseLeave( /*object*/event) {
     this.props.onMouseLeave(event, this.props.index);
-  },
+  }
 });
 
 var FixedDataTableRow = React.createClass({
+  displayName: 'FixedDataTableRow',
 
   propTypes: {
 
@@ -228,30 +232,28 @@ var FixedDataTableRow = React.createClass({
     /**
      * Width of the row.
      */
-    width: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired
   },
 
-  render() /*object*/ {
+  render: function render() /*object*/{
     var style = {
       width: this.props.width,
       height: this.props.height,
-      zIndex: (this.props.zIndex ? this.props.zIndex : 0),
+      zIndex: this.props.zIndex ? this.props.zIndex : 0
     };
     translateDOMPositionXY(style, 0, this.props.offsetTop);
 
-    return (
-      <div
-        style={style}
-        className={cx('fixedDataTableRowLayout/rowWrapper')}>
-        <FixedDataTableRowImpl
-          {...this.props}
-          offsetTop={undefined}
-          zIndex={undefined}
-        />
-      </div>
+    return React.createElement(
+      'div',
+      {
+        style: style,
+        className: cx('fixedDataTableRowLayout/rowWrapper') },
+      React.createElement(FixedDataTableRowImpl, _extends({}, this.props, {
+        offsetTop: undefined,
+        zIndex: undefined
+      }))
     );
-  },
+  }
 });
-
 
 module.exports = FixedDataTableRow;

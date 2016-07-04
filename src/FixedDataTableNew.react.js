@@ -387,6 +387,8 @@ var FixedDataTable = React.createClass({
       this.props.scrollTop !== nextProps.scrollTop) {
       this._didScrollStart();
     }
+
+    this._didScroll();
     this._didScrollStop();
 
     this.setState(this._calculateState(nextProps, this.state));
@@ -648,9 +650,9 @@ var FixedDataTable = React.createClass({
   },
 
   _areColumnSettingsIdentical(
-    oldColumns: Array,
-    newColumns: Array
-  ): boolean {
+      /*array*/ oldColumns,
+      /*array*/ newColumns
+  ) /*boolean*/ {
     if (oldColumns.length !== newColumns.length) {
       return false;
     }
@@ -666,10 +668,10 @@ var FixedDataTable = React.createClass({
   },
 
   _populateColumnsAndColumnData(
-    columns: Array,
-    columnGroups: ?Array,
-    oldState: ?Object
-  ): Object {
+    /*array*/ columns,
+    /*?array*/ columnGroups,
+    /*?object*/oldState
+  ) /*object*/ {
     var canReuseColumnSettings = false;
     var canReuseColumnGroupSettings = false;
 
@@ -1000,7 +1002,7 @@ var FixedDataTable = React.createClass({
           scrollX: x,
         });
       }
-
+      this._didScroll();
       this._didScrollStop();
     }
   },
@@ -1014,6 +1016,7 @@ var FixedDataTable = React.createClass({
       this.setState({
         scrollX: scrollPos,
       });
+      this._didScroll();
       this._didScrollStop();
     }
   },
@@ -1030,7 +1033,14 @@ var FixedDataTable = React.createClass({
         scrollY: scrollState.position,
         scrollContentHeight: scrollState.contentHeight,
       });
+      this._didScroll();
       this._didScrollStop();
+    }
+  },
+
+  _didScroll() {
+    if(this.isMounted() && this._isScrolling && this.props.onScroll) {
+      this.props.onScroll(this.state.scrollX, this.state.scrollY)
     }
   },
 

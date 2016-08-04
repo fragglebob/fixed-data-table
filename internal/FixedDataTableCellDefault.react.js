@@ -75,8 +75,13 @@ var FixedDataTableCellDefault = React.createClass({
     var style = _props.style;
     var className = _props.className;
     var children = _props.children;
+    var columnName = _props.columnName;
+    var // Unused but should not be passed through
+    columnKey = _props.columnKey;
+    var // Unused but should not be passed through
+    rowIndex = _props.rowIndex;
 
-    var props = _objectWithoutProperties(_props, ['height', 'width', 'style', 'className', 'children']);
+    var prop = _objectWithoutProperties(_props, ['height', 'width', 'style', 'className', 'children', 'columnName', 'columnKey', 'rowIndex']);
 
     var innerStyle = _extends({
       height: height,
@@ -108,3 +113,4 @@ var FixedDataTableCellDefault = React.createClass({
 });
 
 module.exports = FixedDataTableCellDefault;
+// Unused but should not be passed through

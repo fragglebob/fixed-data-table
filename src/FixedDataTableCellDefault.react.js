@@ -70,6 +70,7 @@ var FixedDataTableCellDefault = React.createClass({
       style,
       className,
       children,
+      columnName, // Unused but should not be passed through
       columnKey, // Unused but should not be passed through
       rowIndex, // Unused but should not be passed through
       ...prop

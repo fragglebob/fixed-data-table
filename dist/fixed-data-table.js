@@ -964,6 +964,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    onRowClick: PropTypes.func,
 
 	    /**
+	     * Callback that is called when contextual-menu event happens on a row.
+	     */
+	    onRowContextMenu: PropTypes.func,
+
+	    /**
 	     * Callback that is called when a row is double clicked.
 	     */
 	    onRowDoubleClick: PropTypes.func,
@@ -1109,6 +1114,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (this.props.ownerHeight !== nextProps.ownerHeight || this.props.scrollTop !== nextProps.scrollTop) {
 	      this._didScrollStart();
 	    }
+
+	    this._didScroll();
 	    this._didScrollStop();
 
 	    this.setState(this._calculateState(nextProps, this.state));
@@ -1283,6 +1290,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      height: state.bodyHeight,
 	      offsetTop: offsetTop,
 	      onRowClick: state.onRowClick,
+	      onRowContextMenu: state.onRowContextMenu,
 	      onRowDoubleClick: state.onRowDoubleClick,
 	      onRowMouseDown: state.onRowMouseDown,
 	      onRowMouseEnter: state.onRowMouseEnter,
@@ -1329,7 +1337,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	  },
 
-	  _areColumnSettingsIdentical: function _areColumnSettingsIdentical(oldColumns, newColumns) {
+	  _areColumnSettingsIdentical: function _areColumnSettingsIdentical(
+	  /*array*/oldColumns,
+	  /*array*/newColumns) /*boolean*/{
 	    if (oldColumns.length !== newColumns.length) {
 	      return false;
 	    }
@@ -1341,7 +1351,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return true;
 	  },
 
-	  _populateColumnsAndColumnData: function _populateColumnsAndColumnData(columns, columnGroups, oldState) {
+	  _populateColumnsAndColumnData: function _populateColumnsAndColumnData(
+	  /*array*/columns,
+	  /*?array*/columnGroups,
+	  /*?object*/oldState) /*object*/{
 	    var canReuseColumnSettings = false;
 	    var canReuseColumnGroupSettings = false;
 
@@ -1612,7 +1625,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          scrollX: x
 	        });
 	      }
-
+	      this._didScroll();
 	      this._didScrollStop();
 	    }
 	  },
@@ -1625,6 +1638,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.setState({
 	        scrollX: scrollPos
 	      });
+	      this._didScroll();
 	      this._didScrollStop();
 	    }
 	  },
@@ -1641,7 +1655,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        scrollY: scrollState.position,
 	        scrollContentHeight: scrollState.contentHeight
 	      });
+	      this._didScroll();
 	      this._didScrollStop();
+	    }
+	  },
+
+	  _didScroll: function _didScroll() {
+	    if (this.isMounted() && this._isScrolling && this.props.onScroll) {
+	      this.props.onScroll(this.state.scrollX, this.state.scrollY);
 	    }
 	  },
 
@@ -3785,6 +3806,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    height: PropTypes.number.isRequired,
 	    offsetTop: PropTypes.number.isRequired,
 	    onRowClick: PropTypes.func,
+	    onRowContextMenu: PropTypes.func,
 	    onRowDoubleClick: PropTypes.func,
 	    onRowMouseDown: PropTypes.func,
 	    onRowMouseEnter: PropTypes.func,
@@ -3870,6 +3892,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        fixedColumns: props.fixedColumns,
 	        scrollableColumns: props.scrollableColumns,
 	        onClick: props.onRowClick,
+	        onContextMenu: props.onRowContextMenu,
 	        onDoubleClick: props.onRowDoubleClick,
 	        onMouseDown: props.onRowMouseDown,
 	        onMouseEnter: props.onRowMouseEnter,
@@ -4516,6 +4539,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    onClick: PropTypes.func,
 
 	    /**
+	     * Fire when contextual-menu is requested above a row.
+	     */
+	    onContextMenu: PropTypes.func,
+
+	    /**
 	     * Fire when a row is double clicked.
 	     */
 	    onDoubleClick: PropTypes.func,
@@ -4580,6 +4608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      {
 	        className: joinClasses(className, this.props.className),
 	        onClick: this.props.onClick ? this._onClick : null,
+	        onContextMenu: this.props.onContextMenu ? this._onContextMenu : null,
 	        onDoubleClick: this.props.onDoubleClick ? this._onDoubleClick : null,
 	        onMouseDown: this.props.onMouseDown ? this._onMouseDown : null,
 	        onMouseEnter: this.props.onMouseEnter ? this._onMouseEnter : null,
@@ -4621,6 +4650,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  _onClick: function _onClick( /*object*/event) {
 	    this.props.onClick(event, this.props.index);
+	  },
+
+	  _onContextMenu: function _onContextMenu( /*object*/event) {
+	    this.props.onContextMenu(event, this.props.index);
 	  },
 
 	  _onDoubleClick: function _onDoubleClick( /*object*/event) {
@@ -5386,8 +5419,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var style = _props.style;
 	    var className = _props.className;
 	    var children = _props.children;
+	    var columnName = _props.columnName;
+	    var // Unused but should not be passed through
+	    columnKey = _props.columnKey;
+	    var // Unused but should not be passed through
+	    rowIndex = _props.rowIndex;
 
-	    var props = _objectWithoutProperties(_props, ['height', 'width', 'style', 'className', 'children']);
+	    var prop = _objectWithoutProperties(_props, ['height', 'width', 'style', 'className', 'children', 'columnName', 'columnKey', 'rowIndex']);
 
 	    var innerStyle = _extends({
 	      height: height,
@@ -5419,6 +5457,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	module.exports = FixedDataTableCellDefault;
+	// Unused but should not be passed through
 
 /***/ },
 /* 66 */

@@ -73,7 +73,7 @@ var FixedDataTableCellDefault = React.createClass({
       columnName, // Unused but should not be passed through
       columnKey, // Unused but should not be passed through
       rowIndex, // Unused but should not be passed through
-      ...prop
+      ...props
     } = this.props;
 
     var innerStyle = {
